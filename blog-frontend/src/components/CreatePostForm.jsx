@@ -1,36 +1,40 @@
 import { useState } from "react";
-import { useCreatePostMutation, useUploadPostPhotoMutation } from "../redux-toolkit/features/posts/postsApiSlice";
+import {
+  useCreatePostMutation,
+  useUploadPostPhotoMutation,
+} from "../redux-toolkit/features/posts/postsApiSlice";
 import { useNavigate } from "react-router-dom";
+import { assets } from "../assets/assets";
 const CreatePostForm = () => {
   const navigate = useNavigate();
   const [newPost, setNewPost] = useState({
     title: "",
     content: "",
-    photo : null,
+    photo: null,
   });
-  const [uploadPostPhoto ] = useUploadPostPhotoMutation()
+
+  const [uploadPostPhoto] = useUploadPostPhotoMutation();
   const [createPost, { isLoading, isError, error }] = useCreatePostMutation();
   const handelSubmit = async (e) => {
     e.preventDefault();
-    if(!newPost.photo){
-      alert("please select an image first!")
-      return
+    if (!newPost.photo) {
+      alert("please select an image first!");
+      return;
     }
     try {
-      const formData = new FormData()
-      formData.append("postPhoto" , newPost.photo)
-      const photoResult = await uploadPostPhoto(formData).unwrap()
+      const formData = new FormData();
+      formData.append("postPhoto", newPost.photo);
+      const photoResult = await uploadPostPhoto(formData).unwrap();
       // console.log(photoResult)
-      const imageUrl = photoResult.photoUrl
+      const imageUrl = photoResult.photoUrl;
       const res = await createPost({
         title: newPost.title,
         content: newPost.content,
-        postPhoto : imageUrl,
+        postPhoto: imageUrl,
       }).unwrap();
       setNewPost({
         title: "",
-        content: "",
-        
+        content: "",        
       });
       alert(res?.message || "The Post has created Successfully");
       navigate("/");
@@ -40,42 +44,63 @@ const CreatePostForm = () => {
   };
 
   return (
-    <div className="mx-auto">
-      <form onSubmit={handelSubmit}>
-        <fieldset>
-          
-          <input className="h-50 w-50 bg-gray-400"  placeholder="Upload Photo" type="file" name="photo" id="photo"  onChange={(e) => setNewPost({... newPost , photo : e.target.files[0]})} />
-        </fieldset>
-        <fieldset>
-          <label htmlFor="title">title</label>
-          <input
-            type="text"
-            name="titel"
-            required
-            id="title"
-            value={newPost.title}
-            onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+    <form
+      className="flex-1 bg-blue-50/50 text-gray-600 h-screen overflow-scroll "
+      onSubmit={handelSubmit}
+    >
+      <div className="bg-white w-full max-w-2xl p-4 md:p-10  sm:my-10 md:mx-15  shadow rounded">
+        <p>Upload thumbnail</p>
+        <label htmlFor="image">
+          <img
+            src={
+              !newPost.photo
+                ? assets.upload_area
+                : URL.createObjectURL(newPost.photo)
+            }
+            alt=""
+            className="mt-2 h-16 rounded cursor-pointer"
           />
-        </fieldset>
-        <fieldset>
-          <label htmlFor="content">Content</label>
-          <textarea
-            name="content"
-            id="content"
+          <input
+            type="file"
+            hidden
             required
-            placeholder="Enter your post contnet"
-            value={newPost.content}
+            id="image"
+            onChange={(e) =>
+              setNewPost({ ...newPost, photo: e.target.files[0] })
+            }
+          />
+        </label>
+        <p className="mt-4">Blog title</p>
+        <input
+          type="text"
+          className="w-full max-w-lg mt-2 p-2 border border-gray-300 outline-none rounded"
+          required
+          onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+        />
+        <p className="mt-4">Blog Description</p>
+        <div className="max-w-lg h-75 pt-3 pb-16 sm:pb-10 ">
+          <textarea
+            className="h-full outline-none w-full border border-gray-300 rounded p-3"
             onChange={(e) =>
               setNewPost({ ...newPost, content: e.target.value })
             }
-          ></textarea>
-        </fieldset>
-        <button disabled={isLoading} type="submit">
-          {isLoading ? "Adding the Post" : "Create Post"}
+            placeholder="You can type here"
+          />
+        </div>
+        <button
+          className="mt-8 w-40 h-10 bg-(--primary-color) text-white rounded text-sm cursor-pointer hover:scale-y-110 hover:space-x-1.5 duration-200 transition-all"
+          disabled={isLoading}
+          type="submit"
+        >
+          {isLoading ? "Submiting" : "Add Blog"}
         </button>
-      </form>
-      {isError && <p>{error?.data?.message}</p>}
-    </div>
+        {isError && (
+          <p className="text-red-500 font-bold mt-10 first-letter:capitalize ">
+            {error?.data?.message || "something went wrong! Try again later."}
+          </p>
+        )}
+      </div>
+    </form>
   );
 };
 

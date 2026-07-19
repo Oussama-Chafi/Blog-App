@@ -16,6 +16,7 @@ import ProfilePage from "./pages/ProfilePage";
 import ChangePassword from "./pages/ChangePassword";
 import MyPosts from "./pages/MyPosts";
 import AfterRegisterComponent from "./components/AfterRegisterComponent";
+import "quill/dist/quill.snow.css" 
 function App() {
   const token = useSelector((state) => state.auth.token);
   console.log(token);

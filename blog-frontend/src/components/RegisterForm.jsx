@@ -53,7 +53,7 @@ function RegisterForm() {
 
   return (
     <div className="h-screen bg-white flex flex-col items-center justify-center  ">
-      <div className=" shadow-lg px-10 py-8 rounded-lg  max-sm:w-full sm:w-[80%] md:w-[50%] max-md:w-[50%]  lg:w-[50%] ">
+      <div className=" shadow-lg px-10 py-8 rounded-lg  max-sm:w-full sm:w-[80%] md:w-[50%] max-md:w-[50%]  lg:w-130 ">
         <h2 className="font-bold text-center mb-5 text-2xl">
           Login to your Account
         </h2>
