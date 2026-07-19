@@ -1,0 +1,39 @@
+/* @import "tailwindcss";
+
+:root{
+    --primary-color : #5044E5;
+    --border-search : #0000004D;
+    --content-color : #757575;
+}
+
+@layer utilities {
+.navbar{
+  @apply flex flex-col gap-4 items-center justify w-full h-screen bg-white-97 z-50
+         -translate-y-full transition-transform 
+}
+.active{
+  @apply translate-y-0
+}
+} */
+
+
+@import "tailwindcss";
+
+:root {
+  --primary-color: #5044E5;
+  --border-search: #0000004D;
+  --content-color: #757575;
+}
+
+/* @layer utilities {
+  .navbar {
+ 
+    @apply flex flex-col  items-center justify-center w-full h-screen  bg-white/97 z-50 -translate-y-full transition-transform fixed;
+  }
+              
+           
+  
+  .active {
+    @apply translate-y-0;
+  }
+} */
