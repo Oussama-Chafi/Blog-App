@@ -20,4 +20,12 @@ router
     uploadPhotoController.uploadPostPhoto,
   );
 
+router
+  .route("/:id/update-post-photo")
+  .patch(
+    verifyJWT,
+    uploader.single("updatePostPhoto"),
+    uploadPhotoController.updatePostPhoto,
+  );
+
 module.exports = router;

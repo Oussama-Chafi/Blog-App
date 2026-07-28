@@ -3,16 +3,17 @@ const Post = require("../models/postSchema");
 const uploadPhoto = require("../middlewares/uploadPhoto");
 
 const createPost = async (req, res) => {
-  const { title, content , postPhoto} = req.body;
-
-  if (!title || !content) {
-    throw new AppError("title and content is required !", 400);
+  const { title, content, postPhoto, imagePublicId } = req.body;
+  console.log(req.body);
+  if (!title || !content || !postPhoto) {
+    throw new AppError("Title and Content and Post Photo is required !", 400);
   }
 
   const blog = await Post.create({
     title,
     content,
-    postPhoto ,
+    postPhoto,
+    imagePublicId,
     author: req.user.id,
   });
 
@@ -53,16 +54,15 @@ const getMyPosts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const skip = (page - 1) * limit;
-  const search = req.query.search || ""
+  const search = req.query.search || "";
 
   const myPosts = await Post.find({
-    
     author: req.user.id,
 
     title: {
-      $regex : search , $options : "i"
-    }
-    
+      $regex: search,
+      $options: "i",
+    },
   })
     .sort({ _id: -1 })
     .skip(skip)
@@ -92,6 +92,7 @@ const getPost = async (req, res) => {
 
 const updatePost = async (req, res) => {
   const { id } = req.params;
+  const updateData = req.body || req.body.finalUpdateData;
   const post = await Post.findById(id);
   if (!post) {
     throw new AppError("this post is not exist", 404);
@@ -99,7 +100,7 @@ const updatePost = async (req, res) => {
   if (req.user.id !== post.author.toString()) {
     throw new AppError("you can not update this Post", 403);
   }
-  const newUpdate = await Post.findByIdAndUpdate(id, req.body, {
+  const newUpdate = await Post.findByIdAndUpdate(id, updateData, {
     returnDocument: "after",
   });
   res.status(200).json({ success: true, data: newUpdate });

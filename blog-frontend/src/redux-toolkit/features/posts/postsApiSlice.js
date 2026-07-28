@@ -9,10 +9,10 @@ export const postApiSlice = apiSlice.injectEndpoints({
       providesTags: ["posts"],
     }),
     createPost: builder.mutation({
-      query: ({ title, content , postPhoto}) => ({
+      query: ({ title, content, postPhoto, imagePublicId }) => ({
         url: "/posts/add",
         method: "POST",
-        body: { title, content , postPhoto},
+        body: { title, content, postPhoto, imagePublicId },
       }),
       invalidatesTags: ["posts"],
     }),
@@ -29,23 +29,31 @@ export const postApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["posts"],
     }),
     updatePost: builder.mutation({
-      query: ({ id, newUpdate }) => ({
+      query: ({ id, finalUpdateData }) => ({
         url: `/posts/update/${id}`,
         method: "POST",
-        body: { ...newUpdate },
+        body: finalUpdateData,
       }),
       invalidatesTags: ["posts"],
     }),
     getMyPosts: builder.query({
-      query: ({ page, limit , search }) => `/posts/my-posts?page=${page}&limit=${limit}&search=${search}`,
-      transformResponse: (response) => response.data, 
+      query: ({ page, limit, search }) =>
+        `/posts/my-posts?page=${page}&limit=${limit}&search=${search}`,
+      transformResponse: (response) => response.data,
       providesTags: ["posts"],
     }),
     uploadPostPhoto: builder.mutation({
       query: (formData) => ({
-        url: "/upload-post-photo",
+        url: "/photos/upload-post-photo",
         method: "POST",
-        body: formData ,
+        body: formData,
+      }),
+    }),
+    updatePostPhoto: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/photos/${id}/update-post-photo`,
+        method: "PATCH",
+        body: formData,
       }),
     }),
   }),
@@ -59,4 +67,5 @@ export const {
   useUpdatePostMutation,
   useGetMyPostsQuery,
   useUploadPostPhotoMutation,
+  useUpdatePostPhotoMutation,
 } = postApiSlice;

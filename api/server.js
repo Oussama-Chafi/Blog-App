@@ -26,7 +26,7 @@ app.use("/", require("./routes/root"));
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/users", require("./routes/adminRoute"));
 app.use("/profile", require("./routes/profileRoute"));
-app.use("/", require("./routes/photoRoute"));
+app.use("/photos", require("./routes/photoRoute"));
 app.use("/posts", require("./routes/postsRoute"));
 
 require("./middlewares/cron");

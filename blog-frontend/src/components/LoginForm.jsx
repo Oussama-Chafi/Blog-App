@@ -49,11 +49,9 @@ const LoginForm = () => {
   };
   console.log("isError value", isError, "error", error);
 
-
-
   return (
     <div className="h-screen bg-white flex flex-col items-center justify-center  ">
-      <div className=" shadow-lg px-3 md:px-10 py-8 rounded-lg max-sm:w-full sm:w-[80%] md:w-[50%] max-md:w-[50%] lg-w-130 ">
+      <div className=" shadow-lg px-3 md:px-10 py-8 rounded-lg max-sm:w-full sm:w-[80%] md:w-[50%] max-md:w-[50%] lg:w-130 ">
         <h2 className="font-bold text-center mb-5 text-2xl">
           Login to your Account
         </h2>
@@ -105,8 +103,13 @@ const LoginForm = () => {
           )}
         </div>
         <div className=" mt-5 flex gap-4 items-center justify-between px-4 flex-wrap ">
-          <p className="text-gray-400 text-center max-sm:w-full">Don't have an Account ? </p>
-          <a className="text-blue-500  hover:text-blue-500/90 cursor-pointer text-center max-sm:w-full" href="/auth/register">
+          <p className="text-gray-400 text-center max-sm:w-full">
+            Don't have an Account ?{" "}
+          </p>
+          <a
+            className="text-blue-500  hover:text-blue-500/90 cursor-pointer text-center max-sm:w-full"
+            href="/auth/register"
+          >
             Sign up
           </a>
         </div>

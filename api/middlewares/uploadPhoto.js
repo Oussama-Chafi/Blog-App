@@ -4,7 +4,7 @@ const streamifier = require("streamifier");
 
 const uploader = multer({ storage: multer.memoryStorage() });
 
-const uploadToCloudinary = async (file , folderName) => {
+const uploadToCloudinary = async (file, folderName) => {
   return new Promise((resolve, reject) => {
     const steam = cloudinary.uploader.upload_stream(
       { folder: folderName },
@@ -17,4 +17,9 @@ const uploadToCloudinary = async (file , folderName) => {
   });
 };
 
-module.exports = { uploader, uploadToCloudinary };
+const removeFromCloudinary = async (publicId) => {
+  const result = await cloudinary.uploader.destroy(publicId);
+  return result;
+};
+
+module.exports = { uploader, uploadToCloudinary, removeFromCloudinary };

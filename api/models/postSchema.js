@@ -14,7 +14,11 @@ const postSchema = mongoose.Schema(
     },
     postPhoto: {
       type: String,
-      
+      required: true,
+    },
+    imagePublicId: {
+      type: String,
+      required: true,
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,

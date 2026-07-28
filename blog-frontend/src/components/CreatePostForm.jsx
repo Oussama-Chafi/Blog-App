@@ -13,7 +13,8 @@ const CreatePostForm = () => {
     photo: null,
   });
 
-  const [uploadPostPhoto] = useUploadPostPhotoMutation();
+  const [uploadPostPhoto, { isLoading: photoLoading }] =
+    useUploadPostPhotoMutation();
   const [createPost, { isLoading, isError, error }] = useCreatePostMutation();
   const handelSubmit = async (e) => {
     e.preventDefault();
@@ -25,16 +26,19 @@ const CreatePostForm = () => {
       const formData = new FormData();
       formData.append("postPhoto", newPost.photo);
       const photoResult = await uploadPostPhoto(formData).unwrap();
-      // console.log(photoResult)
-      const imageUrl = photoResult.photoUrl;
+
+      const postPhoto = photoResult.photoUrl;
+      const imagePublicId = photoResult.publicId;
+
       const res = await createPost({
         title: newPost.title,
         content: newPost.content,
-        postPhoto: imageUrl,
+        postPhoto,
+        imagePublicId,
       }).unwrap();
       setNewPost({
         title: "",
-        content: "",        
+        content: "",
       });
       alert(res?.message || "The Post has created Successfully");
       navigate("/");
@@ -58,7 +62,7 @@ const CreatePostForm = () => {
                 : URL.createObjectURL(newPost.photo)
             }
             alt=""
-            className="mt-2 h-16 rounded cursor-pointer"
+            className={`mt-2 h-16 rounded cursor-pointer ${isLoading || photoLoading ? "opacity-70" : ""}`}
           />
           <input
             type="file"
@@ -70,6 +74,11 @@ const CreatePostForm = () => {
             }
           />
         </label>
+        {photoLoading && (
+          <p className="my-4 text-black  ">
+            We uploading the Image, please wait.
+          </p>
+        )}
         <p className="mt-4">Blog title</p>
         <input
           type="text"
@@ -88,11 +97,11 @@ const CreatePostForm = () => {
           />
         </div>
         <button
-          className="mt-8 w-40 h-10 bg-(--primary-color) text-white rounded text-sm cursor-pointer hover:scale-y-110 hover:space-x-1.5 duration-200 transition-all"
-          disabled={isLoading}
+          className={`mt-8 w-40 h-10 bg-(--primary-color) text-white rounded text-sm cursor-pointer hover:scale-y-110 hover:space-x-1.5 duration-200 transition-all ${isLoading || photoLoading ? "opacity-75" : ""}`}
+          disabled={photoLoading || photoLoading}
           type="submit"
         >
-          {isLoading ? "Submiting" : "Add Blog"}
+          {isLoading || photoLoading ? "Submiting..." : "Add Blog"}
         </button>
         {isError && (
           <p className="text-red-500 font-bold mt-10 first-letter:capitalize ">
